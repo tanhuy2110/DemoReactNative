@@ -1,64 +1,87 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { View, StyleSheet, TextInput, ActivityIndicator} from 'react-native';
+import ButtonLogin from './ButtonLogin'
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
             password: '',
-            errorMessage: null
+            error: '',
+            authenticating: false,
         };
     }
 
-    handleLogin = () => {
+    handleClick = () => {
+        console.log('pressed');
+    }
 
+    onPressSignIn = () => {
+        this.setState({
+            authenticating: true
+        })
     }
     
-    render() {
+    renderCurrentState = () => {
+        if(this.state.authenticating) {
+            retrun (
+                <View>
+                    <ActivityIndicator size = 'large'/>
+                </View>
+            )
+        }
         return (
-            <View style={styles.container}>
-                <Text>Login</Text>
-                {this.state.errorMessage &&
-                    <Text style={{ color: 'red' }}>
-                        {this.state.errorMessage}
-                    </Text>}
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
+            <View>
+                <TextInput style={styles.input}
+                    underlineColorAndroid='transparent'
+                    placeholder='Enter Your Email...'
+                    autoCorrect = {false}
+                    placeholderTextColor='rgba(225,225,225,0.7)'
                 />
-                <TextInput
+                <TextInput style={styles.input}
+                    underlineColorAndroid='transparent'
+                    returnKeyType="go"
+                    placeholder='Enter Your Password...'
+                    placeholderTextColor='rgba(225,225,225,0.7)'
                     secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
                 />
-                <Button title="Login" onPress={this.handleLogin} />
-                <Button
-                    title="Don't have an account? Sign Up"
-                    onPress={() => this.props.navigation.navigate('Register')}
-                />
+                <ButtonLogin clickLogin = {this.onPressSignIn} ></ButtonLogin>
             </View>
-        );
+        )
     }
 
+    render() {
+        return (
+            <View>
+                { this.renderCurrentState() }
+           </View>
+        );
+    }
 }
-
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        padding: 20
     },
-    textInput: {
+    input: {
         height: 40,
-        width: '90%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 8
+        backgroundColor: 'rgba(225,225,225,0.2)',
+        marginBottom: 10,
+        margin: 10,
+        paddingLeft: 20,
+        color: '#fff',
+        borderRadius: 5,
+    },
+    buttonContainer: {
+        backgroundColor: '#2980b6',
+        paddingVertical: 15,
+        marginLeft: 90,
+        marginRight: 90,
+        marginBottom: 30,
+        marginTop: 30
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: '700'
     }
 })
